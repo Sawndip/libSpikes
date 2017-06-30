@@ -2,13 +2,11 @@
 // Created by akshay on 29-Jun-17.
 //
 
-#include <iostream>
-#include <Eigen/Core>
+#include "libSpikes/Core"
 
 int main(){
 
-//    std::cout << "hello" << std::endl;
-    Eigen::Vector2d a(5.0, 6.0);
-    std::cout << a << std::endl;
+    Spikes::FileReader::get_data();
+
     return 0;
 }
