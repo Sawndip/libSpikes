@@ -1,0 +1,14 @@
+// This file is a part of libSpike a Spiking Neural Network framework
+
+// Created by akshay on 30-Jun-17.
+//
+
+#ifndef LIBSPIKES_CORE_H
+#define LIBSPIKES_CORE_H
+
+//#define LIBSPIKES_TEST_H
+
+#include "src/Core/FileReader.h"
+
+
+#endif //LIBSPIKES_CORE_H
