@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <Eigen>
+#include <Eigen/Core>
 
 #ifndef LIBSPIKES_FILEREADER_H
 #define LIBSPIKES_FILEREADER_H
