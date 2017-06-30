@@ -14,7 +14,7 @@ namespace Spikes {
 		static bool contains_number(const std::string &c);
 	public:
 		explicit FileReader(std::string);
-		std::vector<Eigen::MatrixXd> get_data(int rows=0, int columns=0) const;
+		static std::vector<Eigen::MatrixXd> get_data(int rows=0, int columns=0) const;
 		~FileReader();
 	};
 }
