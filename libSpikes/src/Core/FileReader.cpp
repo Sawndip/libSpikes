@@ -1,13 +1,10 @@
-#include "stdafx.h"
 #include <boost/filesystem.hpp>
 #include <vector>
 #include "FileReader.h"
 #include <iostream>
 #include <sstream>
-#include "alphanum.h"
-#include <Eigen/Core/util/ForwardDeclarations.h>
-#include <armadillo>
-#include <Eigen/Core/util/ForwardDeclarations.h>
+#include <Eigen/src/Core/util/ForwardDeclarations.h>
+//#include <armadillo>
 #include <vector>
 
 using namespace Spikes;
