@@ -1,5 +1,5 @@
-#ifndef ALPHANUM__HPP
-#define ALPHANUM__HPP
+#ifndef LIBSPIKES_ALPHANUM__HPP
+#define LIBSPIKES_ALPHANUM__HPP
 
 /*
 The Alphanum Algorithm is an improved sorting algorithm for strings
