@@ -1,11 +1,9 @@
-#include <boost/filesystem.hpp>
 #include <vector>
 #include "FileReader.h"
 #include <iostream>
-#include <sstream>
-#include <Eigen/src/Core/util/ForwardDeclarations.h>
-//#include <armadillo>
-#include <vector>
+#include <fstream>
+#include <dirent.h>
+#include "alphanum.h"
 
 using namespace Spikes;
 
@@ -30,66 +28,88 @@ FileReader::~FileReader() {
 //--------------------------------------------------------------
 
 /// Returns a matrix after loading from the file.
-Eigen::MatrixXd FileReader::load_csv(const std::string &path, const int rows_csv, const int columns_csv) const {
-    std::ifstream indata;
-    indata.open(path);
+Eigen::MatrixXd FileReader::load_csv(const std::string &path) {
+    this->rows = 0;
+    this->columns = 0;
+
+    std::ifstream in_data;
+    in_data.open(path);
     std::string line;
     std::vector<double> values;
-    int rows = 0;
-    while (getline(indata, line)) {
+
+    while (getline(in_data, line)) {
         std::stringstream lineStream(line);
         std::string cell;
         while (std::getline(lineStream, cell, ',')) {
             values.push_back(std::stod(cell));
         }
         ++rows;
+
+        if (this->rows == 1) {
+            this->columns = (int) values.size();
+        }
     }
 
     return Eigen::Map<const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(values.data(),
-                                                                                                    rows_csv,
-                                                                                                    columns_csv);;
+                                                                                                    this->rows,
+                                                                                                    this->columns);
 }
 
-///Another way to load in CSV files and send it as Eigen vector.
-Eigen::MatrixXd FileReader::load_csv_arma(const std::string &path) {
-    arma::mat X;
-    X.load(path, arma::csv_ascii);
-    std::cout << X.n_cols << " " << X.n_rows << std::endl;
-    return Eigen::Map<const Eigen::MatrixXd>(X.memptr(), X.n_rows, X.n_cols);
+/// Return an Eigen 2D Vector with number of rows and columns.
+Eigen::Vector2d FileReader::shape() {
+
+    try {
+        has_zero(this->rows, this->columns);
+    } catch (const std::invalid_argument &e) {
+        std::cout << e.what();
+    }
+
+    Eigen::Vector2d data(this->rows, this->columns);
+    return data;
 }
 
-/// Returns a vector of all the file names loaded from the folder.
-std::vector<std::string> FileReader::list_dir(void) const {
+/// Returns a vector of all sorted file names from the folder.
+std::vector<std::string> FileReader::list_dir() {
     std::vector<std::string> file_names;
 
-    boost::filesystem::path p(location);
-    try {
-        for (auto i = boost::filesystem::directory_iterator(p); i != boost::filesystem::directory_iterator(); ++i) {
-            if (!is_directory(i->path())) //we eliminate directories
-            {
-                file_names.insert(file_names.end(), i->path().filename().string());
-            } else
-                continue;
-        }
-    }
-    catch (const boost::filesystem::filesystem_error &e) {
-        if (e.code() == boost::system::errc::permission_denied)
-            std::cout << "Search permission is denied for one of the directories " << "in the path prefix of " << p
-                      << "\n";
-        else
-            std::cout << "is_directory(" << p << ") failed with "
-                      << e.code().message() << '\n';
+    char *chr = const_cast<char *>(location.c_str());
+
+    struct dirent *entry;
+    DIR *dir = opendir(chr);
+    while ((entry = readdir(dir)) != NULL) {
+        file_names.push_back(
+                (std::basic_string<char, std::char_traits<char>, std::allocator<char>> &&) (entry->d_name));
     }
 
-    sort(file_names.begin(), file_names.end(), doj::alphanum_less<std::string>());
+    closedir(dir);
+
+    std::sort(file_names.begin(), file_names.end(), doj::alphanum_less<std::string>());
 
     return file_names;
 }
 
 /// Checks if the string contains numbers
+// TODO: Change this to check for file with "sam%d"
 bool FileReader::contains_number(const std::string &c) {
     return (c.find_first_of("0123456789") != std::string::npos);
 }
+
+
+//--------------------------------------------------------------
+//
+//						Exceptions/Exits
+//
+//--------------------------------------------------------------
+
+
+int FileReader::has_zero(int rows, int columns) {
+
+    if (rows == 0 || columns == 0) {
+        std::cout << "Matrix should be of two dimension or a CSV file is not loaded." << '\n';
+        exit(1);
+    }
+}
+
 
 //--------------------------------------------------------------
 //
@@ -97,21 +117,12 @@ bool FileReader::contains_number(const std::string &c) {
 //
 //--------------------------------------------------------------
 
-/// Returns a vector of MatrixXd objects sample wise. If the sample size is know then the process is much quicker else the meory consumption is much higher.
-std::vector<Eigen::MatrixXd> FileReader::get_data(int rows, int columns) const {
+///// Returns a vector of MatrixXd objects sample wise. If the sample size is know then the process is much quicker else the memory consumption is much higher.
+std::vector<Eigen::MatrixXd> FileReader::get_data() {
     std::vector<Eigen::MatrixXd> data;
-    std::cout << rows;
-    if (rows == 0 || columns == 0) {
-        for (auto i : list_dir()) {
-            if (contains_number(i)) {
-                data.push_back(load_csv_arma(location + "/" + i));
-            } else { continue; }
-        }
-    } else {
-        for (auto i : list_dir()) {
-            if (contains_number(i)) {
-                data.push_back(load_csv(location + "/" + i, rows, columns));
-            } else { continue; }
+    for (auto i : list_dir()) {
+        if (contains_number(i)) {
+            data.push_back(load_csv(location + "/" + i));
         }
     }
 
