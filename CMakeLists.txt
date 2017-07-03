@@ -24,7 +24,7 @@ set(main.cpp)
 set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/libs")
 INCLUDE_DIRECTORIES ( "${EXTERNAL_LIBS}" )
 
-add_executable(libSpikes ${SOURCE_FILES} main.cpp ${src})
+add_executable(libSpikes ${SOURCE_FILES} main.cpp ${src} libSpikes/src/Core/alphanum.h)
 
 #set(REG_SRC ".*/Core/")
 #set(REG_EXT "[^/]*([.]cpp|[.]c|[.]h|[.]hpp)$")
