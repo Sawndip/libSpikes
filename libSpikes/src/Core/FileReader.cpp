@@ -1,4 +1,5 @@
 #include <vector>
+#include <map>
 #include "FileReader.h"
 #include <iostream>
 #include <fstream>
@@ -108,6 +109,8 @@ int FileReader::has_zero(int rows, int columns) {
         std::cout << "Matrix should be of two dimension or a CSV file is not loaded." << '\n';
         exit(1);
     }
+
+    return 0;
 }
 
 
@@ -117,14 +120,38 @@ int FileReader::has_zero(int rows, int columns) {
 //
 //--------------------------------------------------------------
 
-///// Returns a vector of MatrixXd objects sample wise. If the sample size is know then the process is much quicker else the memory consumption is much higher.
-std::vector<Eigen::MatrixXd> FileReader::get_data() {
-    std::vector<Eigen::MatrixXd> data;
+/// Returns a par of sample names and samples.
+std::pair<std::vector<std::string>, std::vector<Eigen::MatrixXd>> FileReader::get_data_with_sample_names() {
+
+    std::vector<Eigen::MatrixXd> samples;
+    std::vector<std::string> sample_names;
+
     for (auto i : list_dir()) {
         if (contains_number(i)) {
-            data.push_back(load_csv(location + "/" + i));
+            samples.push_back(load_csv(location + "/" + i));
+            sample_names.push_back(i);
         }
     }
 
-    return data;
+    return {sample_names, samples};
+}
+
+/// Returns a map of string and different data type of vectors.
+std::map<std::string, Spikes::data> FileReader::get_data_with_others() {
+    std::map<std::string, Spikes::data> content;
+
+    std::vector<Eigen::MatrixXd> samples;
+    std::vector<std::string> sample_names;
+
+    for (auto i : list_dir()) {
+        if (contains_number(i)) {
+            samples.push_back(load_csv(location + "/" + i));
+            sample_names.push_back(i);
+        }
+    }
+
+    content.emplace(std::make_pair("samples", Spikes::data{std::move(samples), 0}));
+    content.emplace(std::make_pair("sample_names", Spikes::data{std::move(sample_names), 1}));
+
+    return content;
 }
