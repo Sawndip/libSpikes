@@ -1,3 +1,4 @@
+#include <utility>
 #include <vector>
 #include <map>
 #include "FileReader.h"
@@ -15,12 +16,10 @@ using namespace Spikes;
 //--------------------------------------------------------------
 
 FileReader::FileReader(std::string loc) {
-    location = loc;
+    location = std::move(loc);
 }
 
-FileReader::~FileReader() {
-
-}
+FileReader::~FileReader() = default;
 
 //--------------------------------------------------------------
 //
@@ -73,7 +72,7 @@ Eigen::Vector2d FileReader::shape() {
 std::vector<std::string> FileReader::list_dir() {
     std::vector<std::string> file_names;
 
-    char *chr = const_cast<char *>(location.c_str());
+    auto *chr = const_cast<char *>(location.c_str());
 
     struct dirent *entry;
     DIR *dir = opendir(chr);
@@ -116,7 +115,7 @@ int FileReader::has_zero(int rows, int columns) {
 
 //--------------------------------------------------------------
 //
-//						Public Methods
+//						Private Methods
 //
 //--------------------------------------------------------------
 
@@ -155,3 +154,11 @@ std::map<std::string, Spikes::data> FileReader::get_data_with_others() {
 
     return content;
 }
+
+//--------------------------------------------------------------
+//
+//						Public Methods
+//
+//--------------------------------------------------------------
+
+
