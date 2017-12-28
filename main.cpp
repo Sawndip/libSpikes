@@ -9,7 +9,7 @@ using namespace Spikes;
 
 int main(){
 
-    auto a = FileReader("C:\\Users\\aksha\\Documents\\GitHub\\NeuCube_Matlab\\data\\wrist_movement_eeg");
+    auto a = FileReader(R"(C:\Users\aksha\Documents\GitHub\NeuCube_Matlab\data\wrist_movement_eeg)");
 
     for (auto i:a.get_data()) {
         std::cout<<i<<'\n';
