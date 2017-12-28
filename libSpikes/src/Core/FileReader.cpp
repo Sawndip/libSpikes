@@ -128,7 +128,7 @@ std::pair<std::vector<std::string>, std::vector<Eigen::MatrixXd>> FileReader::ge
 
     for (auto i : list_dir()) {
         if (contains_number(i)) {
-            samples.push_back(load_csv(location + "/" + i));
+            samples.push_back(load_csv(location + separator() + i));
             sample_names.push_back(i);
         }
     }
@@ -145,7 +145,7 @@ std::map<std::string, Spikes::data> FileReader::get_data_with_others() {
 
     for (auto i : list_dir()) {
         if (contains_number(i)) {
-            samples.push_back(load_csv(location + "/" + i));
+            samples.push_back(load_csv(location + separator() + i));
             sample_names.push_back(i);
         }
     }

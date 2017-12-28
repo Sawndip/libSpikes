@@ -10,6 +10,15 @@
 #define LIBSPIKES_FILEREADER_H
 
 namespace Spikes {
+
+    inline char separator() {
+        #if defined _WIN32 || defined __CYGWIN__
+                return '\\';
+        #else
+                return '/';
+        #endif
+            }
+
     struct data {
 
         data(std::vector<Eigen::MatrixXd> &&rhs, int idx) {
