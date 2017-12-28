@@ -48,7 +48,7 @@ namespace Spikes {
 
         explicit FileReader(std::string);
 
-        Eigen::Vector2d shape(void);
+        Eigen::Vector2d shape();
 
 
         ~FileReader();
