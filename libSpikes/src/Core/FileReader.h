@@ -58,6 +58,7 @@ namespace Spikes {
         explicit FileReader(std::string);
 
         Eigen::Vector2d shape();
+        std::vector<Eigen::MatrixXd> get_data();
 
 
         ~FileReader();

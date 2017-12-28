@@ -161,4 +161,16 @@ std::map<std::string, Spikes::data> FileReader::get_data_with_others() {
 //
 //--------------------------------------------------------------
 
+/// Returns a vetctor of 2d samples.
+std::vector<Eigen::MatrixXd> FileReader::get_data(){
+    std::vector<Eigen::MatrixXd> samples;
 
+    for (auto i : list_dir()) {
+        if (contains_number(i)) {
+            samples.push_back(load_csv(location + separator() + i));
+        }
+    }
+
+    return samples;
+
+}
