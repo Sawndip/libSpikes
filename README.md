@@ -6,7 +6,7 @@ This library was written using cygwin/minGW. It also supports MSVC but external 
 
 ## Instillation
 
-> I would highly recommend using `Jetbrains Clion` IDE.
+> I would highly recommend using `Jetbrains CLion` IDE.
 
 External libraries required:
 
@@ -23,7 +23,7 @@ git clone https://github.com/akshaybabloo/libSpikes.git
 2. open `libSpikes` and create two folders - `libs` and `winLibs` (only if you are using MSVC)
 3. Copy Boost and Eigen folders to `libs` and `dirent.h` to `winLibs`
 
-Clion should be able to index the libraries.
+CLion should be able to index the libraries.
 
 ## Example
 
