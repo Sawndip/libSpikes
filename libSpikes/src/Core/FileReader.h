@@ -36,7 +36,7 @@ namespace Spikes {
 
         Eigen::MatrixXd load_csv(const std::string &path);
 
-        std::vector<std::string> list_dir(void);
+        std::vector<std::string> list_dir();
 
         bool contains_number(const std::string &c);
 
