@@ -40,7 +40,7 @@ namespace Spikes {
 
         bool contains_number(const std::string &c);
 
-        std::pair<std::vector<std::string>, std::vector<Eigen::MatrixXd>> get_data_with_sample_names(void);
+        std::pair<std::vector<std::string>, std::vector<Eigen::MatrixXd>> get_data_with_sample_names();
 
         std::map<std::string, Spikes::data> get_data_with_others();
 
