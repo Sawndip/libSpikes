@@ -22,6 +22,15 @@ set(main.cpp)
 
 # Setting up external libs
 set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/libs")
+set(EXTERNAL_LIBS_WINDOWS "${PROJECT_SOURCE_DIR}/winLibs")
+
 INCLUDE_DIRECTORIES ( "${EXTERNAL_LIBS}" )
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    INCLUDE_DIRECTORIES ( "${EXTERNAL_LIBS_WINDOWS}" )
+    message(${CMAKE_CXX_COMPILER_ID})
+endif()
+
+
 
 add_executable(libSpikes ${SOURCE_FILES} main.cpp ${src} libSpikes/src/Core/alphanum.h)
